@@ -502,7 +502,7 @@ Admin endpoints will be protected using authentication and authorization.
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/ZestMedia.git
+git clone https://github.com/MhdHarshil/ZestMedia.git
 cd ZestMedia
 ```
 
