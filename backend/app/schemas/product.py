@@ -35,3 +35,12 @@ class ProductCreate(BaseModel):
     image_url: str | None = None
     turnaround: str | None = None
     category_id: int
+    
+class ProductUpdate(BaseModel):
+    name: str | None = None
+    slug: str | None = None
+    tagline: str | None = None
+    summary: str | None = None
+    image_url: str | None = None
+    turnaround: str | None = None
+    category_id: int | None = None
