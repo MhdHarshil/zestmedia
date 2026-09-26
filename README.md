@@ -13,7 +13,7 @@ ZestMedia is a product catalogue and portfolio site for a custom printing and br
 - Configure a product and prepare a quote request for WhatsApp.
 - See configured contact details and business links when supplied through frontend environment variables.
 
-Customers send quote requests through WhatsApp; the business reviews details and confirms pricing directly. The site does not process payments. The quote form includes selected artwork filenames in the message; customers attach the actual artwork in WhatsApp.
+Customers send quote requests through WhatsApp; the business reviews details and confirms pricing directly. The site does not process payments. Customers can attach artwork directly in WhatsApp when they send their request.
 
 ### Admin dashboard
 
