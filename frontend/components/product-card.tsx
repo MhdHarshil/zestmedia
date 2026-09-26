@@ -7,7 +7,7 @@ export function ProductCard({ product, priority = false }: { product: Product; p
   return (
     <Link
       href={`/products/${product.slug}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-foreground/25"
+      className="product-card-link group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-foreground/25"
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <Image
@@ -15,8 +15,9 @@ export function ProductCard({ product, priority = false }: { product: Product; p
           alt={product.name}
           fill
           priority={priority}
+          unoptimized={product.image.startsWith('http')}
           sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.04]"
+          className="product-card-image object-cover"
         />
         <span className="absolute left-3 top-3 rounded-full bg-background/90 px-3 py-1 text-xs font-medium text-foreground backdrop-blur">
           {product.category}

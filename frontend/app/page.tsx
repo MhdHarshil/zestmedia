@@ -5,7 +5,7 @@ import { Hero } from '@/components/home/hero'
 import { SectionHeading } from '@/components/section-heading'
 import { ProductCard } from '@/components/product-card'
 import { LinkButton } from '@/components/cta-button'
-import { products } from '@/lib/products'
+import { getProducts } from '@/lib/api'
 
 const audiences = [
   { title: 'Local businesses', copy: 'Cards, signage and collateral that look established from day one.' },
@@ -21,9 +21,8 @@ const steps = [
   { icon: PackageCheck, title: 'Pick up or delivery', copy: 'Collect from the studio or have it delivered locally — fast, and done right.' },
 ]
 
-const serviceStrip = ['Visiting Cards', 'Flex & Banners', 'T-Shirts', 'Stickers', 'Posters', 'Brochures', 'Invitations', 'Branding']
-
-export default function HomePage() {
+export default async function HomePage() {
+  const products = await getProducts()
   const featured = products.slice(0, 6)
   return (
     <>
@@ -34,7 +33,7 @@ export default function HomePage() {
           <SectionHeading
             kicker="What we print"
             title="Everything your brand needs, on paper and beyond."
-            description="Eight core products, endless combinations. Pick one to see options and get a quote."
+            description="Explore print and branding options. Choose what you need and request a quote."
           />
           <LinkButton href="/products" variant="ghost" size="sm" className="text-brand hover:bg-brand/10">
             View all products <ArrowRight className="size-4" />

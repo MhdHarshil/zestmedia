@@ -12,6 +12,7 @@ export type Product = {
   summary: string
   description: string[]
   image: string
+  images?: string[]
   features: string[]
   audiences: string[]
   turnaround: string

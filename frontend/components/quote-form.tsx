@@ -44,7 +44,7 @@ export function QuoteForm({ product }: { product: Product }) {
     <div className="rounded-3xl border border-border bg-card p-6 md:p-8">
       <h2 className="font-serif text-2xl font-semibold tracking-tight">Build your quote</h2>
       <p className="mt-1 text-sm text-muted-foreground">
-        Choose your options and upload your design. We&apos;ll confirm pricing on WhatsApp.
+        Choose your options and select your artwork. We&apos;ll confirm pricing on WhatsApp.
       </p>
 
       <div className="mt-6 space-y-6">
@@ -90,7 +90,7 @@ export function QuoteForm({ product }: { product: Product }) {
         </div>
 
         <div>
-          <span className="text-sm font-semibold">Upload your design <span className="font-normal text-muted-foreground">(optional)</span></span>
+          <span className="text-sm font-semibold">Artwork file names <span className="font-normal text-muted-foreground">(optional)</span></span>
           <div
             onDragOver={(e) => {
               e.preventDefault()
@@ -117,7 +117,7 @@ export function QuoteForm({ product }: { product: Product }) {
             }}
           >
             <Upload className="size-5 text-muted-foreground" />
-            <p className="mt-2 text-sm font-medium">Drop files or click to browse</p>
+            <p className="mt-2 text-sm font-medium">Select files to include their names</p>
             <p className="mt-1 text-xs text-muted-foreground">PDF, PNG, JPG, AI — up to 5 files</p>
             <input
               ref={inputRef}
@@ -150,19 +150,20 @@ export function QuoteForm({ product }: { product: Product }) {
             </ul>
           )}
           <p className="mt-2 text-xs text-muted-foreground">
-            Files stay on your device — when WhatsApp opens, attach them right in the chat so we can review your artwork.
+            Files are not uploaded. When WhatsApp opens, attach them in the chat so we can review your artwork.
           </p>
         </div>
       </div>
 
       <a
         href={whatsappUrl(buildMessage())}
-        target="_blank"
-        rel="noopener noreferrer"
+        target={site.whatsappNumber ? '_blank' : undefined}
+        rel={site.whatsappNumber ? 'noopener noreferrer' : undefined}
+        aria-disabled={!site.whatsappNumber}
         className={ctaClasses('brand', 'lg', 'mt-8 w-full')}
       >
         <WhatsAppIcon className="size-[1.15em]" />
-        Send my request on WhatsApp
+        {site.whatsappNumber ? 'Send my request on WhatsApp' : 'Set up WhatsApp contact to send request'}
       </a>
       <p className="mt-3 text-center text-xs text-muted-foreground">No online payment. We&apos;ll confirm price and timing first.</p>
     </div>

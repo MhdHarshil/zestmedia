@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { ProductsExplorer } from '@/components/products-explorer'
 import { Kicker } from '@/components/section-heading'
 import { WhatsAppQuoteButton } from '@/components/cta-button'
+import { getProducts } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Products',
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
     'Browse our print and branding products: visiting cards, flex & banners, t-shirt printing, stickers, posters, brochures, invitations and custom branding.',
 }
 
-export default function ProductsPage() {
+export default async function ProductsPage() {
+  const products = await getProducts()
   return (
     <>
       <section className="border-b border-border">
@@ -27,7 +29,7 @@ export default function ProductsPage() {
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
-        <ProductsExplorer />
+        <ProductsExplorer products={products} />
       </section>
 
       <section className="border-t border-border bg-secondary">

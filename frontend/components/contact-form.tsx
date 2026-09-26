@@ -4,11 +4,8 @@ import { useState } from 'react'
 import { whatsappUrl, site } from '@/lib/site'
 import { ctaClasses } from '@/components/cta-button'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
-import { products } from '@/lib/products'
-
-const projectTypes = [...products.map((p) => p.name), 'Something else']
-
-export function ContactForm() {
+export function ContactForm({ productNames }: { productNames: string[] }) {
+  const projectTypes = [...productNames, 'Something else']
   const [name, setName] = useState('')
   const [type, setType] = useState(projectTypes[0])
   const [message, setMessage] = useState('')
@@ -28,9 +25,11 @@ export function ContactForm() {
 
   return (
     <form
+      id="contact-form"
       className="rounded-3xl border border-border bg-card p-6 md:p-8"
       onSubmit={(e) => {
         e.preventDefault()
+        if (!site.whatsappNumber) return
         window.open(whatsappUrl(buildMessage()), '_blank', 'noopener,noreferrer')
       }}
     >
@@ -63,14 +62,12 @@ export function ContactForm() {
         </div>
       </div>
 
-      <button type="submit" className={ctaClasses('brand', 'lg', 'mt-6 w-full')}>
+      <button type="submit" disabled={!site.whatsappNumber} className={ctaClasses('brand', 'lg', 'mt-6 w-full')}>
         <WhatsAppIcon className="size-[1.15em]" />
-        Continue on WhatsApp
+        {site.whatsappNumber ? 'Continue on WhatsApp' : 'WhatsApp contact not configured'}
       </button>
-      <p className="mt-3 text-center text-xs text-muted-foreground">
-        Prefer email? Write to{' '}
-        <a href={`mailto:${site.email}`} className="text-brand underline-offset-4 hover:underline">{site.email}</a>
-      </p>
+      {!site.whatsappNumber && <p className="mt-3 text-center text-xs text-muted-foreground">WhatsApp contact is not configured yet.</p>}
+      {site.email && <p className="mt-3 text-center text-xs text-muted-foreground">Prefer email? Write to <a href={`mailto:${site.email}`} className="text-brand underline-offset-4 hover:underline">{site.email}</a></p>}
     </form>
   )
 }

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 
 class OptionChoiceResponse(BaseModel):
     model_config = ConfigDict(from_attributes=True)
@@ -21,6 +21,10 @@ class ProductResponse(BaseModel):
     tagline: str | None 
     summary: str | None 
     image_url: str | None 
+    image_urls: list[str] = Field(default_factory=list)
+    description: list[str] | None = None
+    features: list[str] | None = None
+    audiences: list[str] | None = None
     turnaround: str | None 
     category_id: int
     options: list[ProductOptionResponse]
@@ -33,6 +37,10 @@ class ProductCreate(BaseModel):
     tagline: str | None = None
     summary: str | None = None
     image_url: str | None = None
+    image_urls: list[str] = Field(default_factory=list)
+    description: list[str] | None = None
+    features: list[str] | None = None
+    audiences: list[str] | None = None
     turnaround: str | None = None
     category_id: int
     
@@ -42,5 +50,9 @@ class ProductUpdate(BaseModel):
     tagline: str | None = None
     summary: str | None = None
     image_url: str | None = None
+    image_urls: list[str] | None = None
+    description: list[str] | None = None
+    features: list[str] | None = None
+    audiences: list[str] | None = None
     turnaround: str | None = None
     category_id: int | None = None

@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Kicker } from '@/components/section-heading'
 import { WhatsAppQuoteButton } from '@/components/cta-button'
+import { getWorks } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Our Work',
@@ -9,29 +10,8 @@ export const metadata: Metadata = {
     'A gallery of recent print and branding projects: business cards, banners, apparel, stickers, posters, brochures, invitations and full brand identities.',
 }
 
-type Work = {
-  src: string
-  title: string
-  category: string
-  span?: boolean
-}
-
-const gallery: Work[] = [
-  { src: '/images/custom-branding.png', title: 'Cohesive brand identity kit', category: 'Branding', span: true },
-  { src: '/images/visiting-cards.png', title: 'Letterpress visiting cards', category: 'Stationery' },
-  { src: '/images/work-1.png', title: 'Debossed card detail', category: 'Stationery' },
-  { src: '/images/posters.png', title: 'Gallery poster series', category: 'Large Format' },
-  { src: '/images/tshirt-printing.png', title: 'Event merch tees', category: 'Apparel' },
-  { src: '/images/work-2.png', title: 'Branded packaging set', category: 'Branding', span: true },
-  { src: '/images/stickers.png', title: 'Die-cut sticker pack', category: 'Small Format' },
-  { src: '/images/invitations.png', title: 'Foil-stamped invitations', category: 'Stationery' },
-  { src: '/images/work-3.png', title: 'Large-format event banner', category: 'Large Format' },
-  { src: '/images/brochures.png', title: 'Tri-fold brochures', category: 'Stationery' },
-  { src: '/images/work-4.png', title: 'Event welcome collateral', category: 'Events', span: true },
-  { src: '/images/flex-banners.png', title: 'Roll-up standees', category: 'Large Format' },
-]
-
-export default function WorkPage() {
+export default async function WorkPage() {
+  const gallery = await getWorks()
   return (
     <>
       <section className="border-b border-border">
@@ -52,20 +32,22 @@ export default function WorkPage() {
         <div className="columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
           {gallery.map((item) => (
             <figure
-              key={item.title}
+              key={item.id}
               className="group relative block break-inside-avoid overflow-hidden rounded-2xl border border-border bg-muted"
             >
               <Image
-                src={item.src || '/placeholder.svg'}
+                src={item.image_url || '/placeholder.svg'}
                 alt={item.title}
                 width={800}
-                height={item.span ? 600 : 900}
+                height={item.featured ? 600 : 900}
+                unoptimized={item.image_url.startsWith('http')}
                 sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
                 className="h-auto w-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               />
               <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 bg-gradient-to-t from-foreground/70 to-transparent p-4 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
                 <span className="font-serif text-base font-semibold text-background">{item.title}</span>
                 <span className="rounded-full bg-background/90 px-2.5 py-1 text-xs font-medium text-foreground">{item.category}</span>
+                {item.description && <span className="basis-full text-sm text-background/90">{item.description}</span>}
               </figcaption>
             </figure>
           ))}

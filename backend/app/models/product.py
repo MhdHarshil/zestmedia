@@ -1,6 +1,6 @@
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, String, Text
+from sqlalchemy import ForeignKey, JSON, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -20,6 +20,10 @@ class Product(Base):
     tagline: Mapped[str | None] = mapped_column(String(255))
     summary: Mapped[str | None] = mapped_column(Text)
     image_url: Mapped[str | None] = mapped_column(Text)
+    image_urls: Mapped[list[str]] = mapped_column(JSON, nullable=False, default=list, server_default=text("'[]'"))
+    description: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
+    features: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
+    audiences: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     turnaround: Mapped[str | None] = mapped_column(String)
 
     category_id: Mapped[int] = mapped_column(

@@ -36,7 +36,7 @@ This keeps the ordering process simple while allowing the business to handle cus
 - View detailed product information
 - Configure product-specific options
 - Select quantities and specifications
-- Upload artwork/design files
+- Select artwork files and attach them manually in WhatsApp
 - Request quotations
 - Send configured requests through WhatsApp
 - Responsive interface
@@ -57,6 +57,8 @@ The admin system is being developed to allow authorized administrators to:
 - Upload product images
 - View customer enquiries
 - Manage customer uploaded files
+
+The current admin page is available at `/admin`. It manages products, categories, product options, and choices through the backend API.
 
 ---
 
@@ -272,6 +274,7 @@ slug
 tagline
 summary
 image_url
+image_urls (JSON array; first image is the card image)
 turnaround
 category_id
 ```
@@ -293,6 +296,17 @@ label
 option_id
 ```
 
+### `portfolio_works`
+
+```text
+id
+title
+category
+image_url
+description
+featured
+```
+
 ---
 
 # API
@@ -308,6 +322,10 @@ GET /api/products/
 ```
 
 Returns products together with their options and choices.
+
+## Portfolio work
+
+`GET /api/works/` returns public portfolio entries. Admins can create, update, or delete entries with `POST /api/works/`, `PATCH /api/works/{work_id}`, and `DELETE /api/works/{work_id}`. The admin dashboard's **Our Work** section manages these entries. Supply an image URL or a path under the frontend `public/` folder; file upload is not implemented.
 
 ### Create a product
 
@@ -520,11 +538,15 @@ uv sync
 
 ### 4. Configure environment variables
 
-Create `.env`:
+Copy the example and edit `backend/.env`:
 
 ```env
 DATABASE_URL=postgresql+psycopg://postgres:YOUR_PASSWORD@localhost:5432/zestmedia
+JWT_SECRET=your-generated-secret
+CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
 ```
+
+Generate a JWT secret with `openssl rand -hex 32`. The file `backend/.env.example` shows the required settings.
 
 Never commit `.env`.
 
@@ -551,6 +573,16 @@ uv run alembic upgrade head
 ```bash
 uv run uvicorn app.main:app --reload
 ```
+
+Create the first administrator in another terminal, from `backend/`:
+
+```bash
+uv run python scripts/create_admin.py
+```
+
+Then open `http://localhost:3000/admin` to sign in and manage the catalogue.
+
+Product forms accept multiple image URLs or paths such as `/images/product.jpg`. Run `uv run alembic upgrade head` after pulling schema changes to add the image list column.
 
 API:
 
@@ -640,7 +672,16 @@ WHATSAPP_NUMBER=
 
 ```env
 NEXT_PUBLIC_API_URL=
+NEXT_PUBLIC_WHATSAPP_NUMBER=
+NEXT_PUBLIC_CONTACT_PHONE=
+NEXT_PUBLIC_CONTACT_EMAIL=
+NEXT_PUBLIC_STUDIO_ADDRESS=
+NEXT_PUBLIC_STUDIO_HOURS=
+NEXT_PUBLIC_INSTAGRAM_URL=
+NEXT_PUBLIC_BEHANCE_URL=
 ```
+
+Copy `frontend/.env.example` to `frontend/.env.local`. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` to the real business number in international format using digits only. WhatsApp quote buttons stay disabled until that value is configured. Fill in the real public contact details before launch.
 
 Never commit secrets or private API keys to Git.
 
@@ -690,6 +731,10 @@ The application will use:
 
 Sensitive files such as `.env` must never be committed.
 
+All product, category, option, and choice write endpoints require an admin JWT bearer token. Public product and category reads remain open for the storefront. Set `JWT_SECRET` before starting the backend and create the first administrator with `uv run python scripts/create_admin.py` from `backend/`.
+
+The customer quote form does not upload files. It lists selected filenames in the WhatsApp message; customers must attach the actual artwork in WhatsApp. Hosted file uploads still need a storage provider and credentials.
+
 ---
 
 # Testing
@@ -738,12 +783,12 @@ Options
 - [x] Product options API
 - [x] Option choices API
 - [x] Nested product responses
-- [ ] Product update API
-- [ ] Product delete API
-- [ ] Category CRUD
-- [ ] Option update/delete
-- [ ] Admin authentication
-- [ ] JWT authorization
+- [x] Product update API
+- [x] Product delete API
+- [x] Category CRUD
+- [x] Option update/delete
+- [x] Admin authentication
+- [x] JWT authorization for write endpoints
 - [ ] Product image upload
 - [ ] Customer file upload
 - [ ] Enquiry system
@@ -755,16 +800,17 @@ Options
 - [x] Initial UI
 - [x] Product pages
 - [x] Product configuration interface
-- [ ] Connect frontend to FastAPI
-- [ ] Replace static product data with API data
-- [ ] Admin login
-- [ ] Admin dashboard
-- [ ] Product management UI
-- [ ] Category management UI
-- [ ] Option management UI
+- [x] Connect storefront to FastAPI
+- [x] Replace product listing data with API data (editorial details still come from local content)
+- [x] Admin login
+- [x] Admin dashboard
+- [x] Product management UI
+- [x] Category management UI
+- [x] Option management UI
+- [x] Portfolio work management UI
 - [ ] Image upload UI
 - [ ] Enquiry management
-- [ ] WhatsApp integration
+- [x] WhatsApp integration (configure the real business number in frontend environment variables)
 
 ## Deployment
 
@@ -796,8 +842,11 @@ Current capabilities include:
 - Product options
 - Option choices
 - Nested product API responses
+- Admin login and protected product/category/option write endpoints
+- Storefront product data loaded from the API (with local fallback during setup)
+- Admin dashboard at `/admin`
 
-The next major milestone is completing product CRUD and building the admin management system.
+Remaining work includes hosted artwork uploads, production deployment, automated tests, and entering the business's real contact details and product copy.
 
 ---
 

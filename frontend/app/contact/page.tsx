@@ -4,6 +4,7 @@ import { Kicker } from '@/components/section-heading'
 import { ContactForm } from '@/components/contact-form'
 import { WhatsAppQuoteButton } from '@/components/cta-button'
 import { site } from '@/lib/site'
+import { getProducts } from '@/lib/api'
 
 export const metadata: Metadata = {
   title: 'Contact',
@@ -15,9 +16,10 @@ const details = [
   { icon: Phone, label: 'Call us', value: site.phoneDisplay, href: `tel:${site.phoneDisplay.replace(/\s/g, '')}` },
   { icon: Mail, label: 'Email', value: site.email, href: `mailto:${site.email}` },
   { icon: Clock, label: 'Opening hours', value: site.hours },
-]
+].filter((detail) => detail.value)
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const products = await getProducts()
   return (
     <>
       <section className="border-b border-border">
@@ -28,7 +30,9 @@ export default function ContactPage() {
               Let&apos;s talk about your project.
             </h1>
             <p className="max-w-sm text-muted-foreground">
-              The fastest way to a quote is WhatsApp — send your details and any artwork, and we&apos;ll reply with pricing and timing.
+              {site.whatsappNumber
+                ? 'The fastest way to a quote is WhatsApp — send your details and any artwork, and we’ll reply with pricing and timing.'
+                : 'Contact links will be available once the business contact details are configured.'}
             </p>
           </div>
         </div>
@@ -71,7 +75,7 @@ export default function ContactPage() {
             </dl>
           </div>
 
-          <ContactForm />
+          <ContactForm productNames={products.map((product) => product.name)} />
         </div>
       </section>
     </>

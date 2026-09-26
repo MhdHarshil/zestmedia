@@ -2,11 +2,12 @@
 
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import { products, productCategories } from '@/lib/products'
+import type { Product } from '@/lib/products'
 import { ProductCard } from '@/components/product-card'
 
-export function ProductsExplorer() {
-  const [active, setActive] = useState<(typeof productCategories)[number]>('All')
+export function ProductsExplorer({ products }: { products: Product[] }) {
+  const productCategories = ['All', ...Array.from(new Set(products.map((product) => product.category)))]
+  const [active, setActive] = useState('All')
 
   const filtered = active === 'All' ? products : products.filter((p) => p.category === active)
 

@@ -1,5 +1,4 @@
 from pydantic import BaseModel
-from sqlalchemy import label
 
 class ProductOptionCreate(BaseModel):
     name: str
@@ -7,3 +6,10 @@ class ProductOptionCreate(BaseModel):
 
 class OptionChoiceCreate(BaseModel):
     label: str
+
+class ProductOptionUpdate(BaseModel):
+    name: str
+    label: str
+
+class OptionChoiceUpdate(BaseModel):
+    label: str | None = None

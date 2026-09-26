@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-import { whatsappUrl, defaultQuoteMessage } from '@/lib/site'
+import { whatsappUrl, defaultQuoteMessage, site } from '@/lib/site'
 import { WhatsAppIcon } from '@/components/whatsapp-icon'
 
 const base =
@@ -68,14 +68,14 @@ export function WhatsAppQuoteButton({
   label?: string
 }) {
   return (
-    <a
-      href={whatsappUrl(message)}
-      target="_blank"
-      rel="noopener noreferrer"
-      className={ctaClasses(variant, size, className)}
-    >
-      <WhatsAppIcon className="size-[1.15em]" />
-      {label}
-    </a>
+    site.whatsappNumber ? (
+      <a href={whatsappUrl(message)} target="_blank" rel="noopener noreferrer" className={ctaClasses(variant, size, className)}>
+        <WhatsAppIcon className="size-[1.15em]" />{label}
+      </a>
+    ) : (
+      <span aria-disabled="true" title="Configure NEXT_PUBLIC_WHATSAPP_NUMBER to enable WhatsApp quotes" className={`${ctaClasses(variant, size, className)} cursor-not-allowed opacity-60`}>
+        <WhatsAppIcon className="size-[1.15em]" />WhatsApp contact not configured
+      </span>
+    )
   )
 }

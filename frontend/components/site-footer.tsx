@@ -50,17 +50,17 @@ export function SiteFooter() {
               <li><Link href="/work" className="text-muted-foreground transition-colors hover:text-foreground">Our Work</Link></li>
               <li><Link href="/about" className="text-muted-foreground transition-colors hover:text-foreground">About</Link></li>
               <li><Link href="/contact" className="text-muted-foreground transition-colors hover:text-foreground">Contact</Link></li>
-              <li><a href={site.socials.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-colors hover:text-foreground">Instagram</a></li>
+              {site.socials.instagram && <li><a href={site.socials.instagram} target="_blank" rel="noopener noreferrer" className="text-muted-foreground transition-colors hover:text-foreground">Instagram</a></li>}
             </ul>
           </div>
 
           <div className="col-span-2 md:col-span-1">
             <h3 className="text-sm font-semibold">Visit &amp; contact</h3>
             <ul className="mt-4 space-y-3 text-sm text-muted-foreground">
-              <li className="flex items-start gap-2.5"><MapPin className="mt-0.5 size-4 shrink-0 text-brand" />{site.address}</li>
-              <li className="flex items-start gap-2.5"><Phone className="mt-0.5 size-4 shrink-0 text-brand" /><a href={`tel:${site.phoneDisplay.replace(/\s/g, '')}`} className="transition-colors hover:text-foreground">{site.phoneDisplay}</a></li>
-              <li className="flex items-start gap-2.5"><Mail className="mt-0.5 size-4 shrink-0 text-brand" /><a href={`mailto:${site.email}`} className="transition-colors hover:text-foreground">{site.email}</a></li>
-              <li className="flex items-start gap-2.5"><Clock className="mt-0.5 size-4 shrink-0 text-brand" />{site.hours}</li>
+              {site.address && <li className="flex items-start gap-2.5"><MapPin className="mt-0.5 size-4 shrink-0 text-brand" />{site.address}</li>}
+              {site.phoneDisplay && <li className="flex items-start gap-2.5"><Phone className="mt-0.5 size-4 shrink-0 text-brand" /><a href={`tel:${site.phoneDisplay.replace(/\s/g, '')}`} className="transition-colors hover:text-foreground">{site.phoneDisplay}</a></li>}
+              {site.email && <li className="flex items-start gap-2.5"><Mail className="mt-0.5 size-4 shrink-0 text-brand" /><a href={`mailto:${site.email}`} className="transition-colors hover:text-foreground">{site.email}</a></li>}
+              {site.hours && <li className="flex items-start gap-2.5"><Clock className="mt-0.5 size-4 shrink-0 text-brand" />{site.hours}</li>}
             </ul>
           </div>
         </div>
