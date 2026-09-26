@@ -1,918 +1,192 @@
 # ZestMedia
 
-A modern web platform for a printing, branding, and custom design business.
+ZestMedia is a product catalogue and portfolio site for a custom printing and branding business. Customers can explore services, configure product details, and send quote requests through WhatsApp. Administrators manage the catalogue and portfolio from a protected dashboard.
 
-ZestMedia allows customers to explore printing and branding services, configure their requirements, upload artwork, and send quotation/order requests directly through WhatsApp.
+> **Project status:** Active development. The storefront, FastAPI API, admin tools, PostgreSQL persistence, and Supabase image uploads are implemented. Online payments and a customer enquiry management system are not part of the current workflow.
 
-The platform also provides an admin system for managing products, categories, product options, and customer enquiries.
+## What the application does
 
----
+### Customer experience
 
-## Overview
+- Browse products, categories, and portfolio work.
+- View product descriptions, features, images, and available options.
+- Configure a product and prepare a quote request for WhatsApp.
+- See configured contact details and business links when supplied through frontend environment variables.
 
-ZestMedia is designed for a real-world printing and branding workflow rather than a traditional online shopping system.
+Customers send quote requests through WhatsApp; the business reviews details and confirms pricing directly. The site does not process payments. The quote form includes selected artwork filenames in the message; customers attach the actual artwork in WhatsApp.
 
-Customers do not make online payments.
+### Admin dashboard
 
-Instead, the customer:
+The dashboard is available at `/admin`. An authenticated administrator can:
 
-1. Selects a product
-2. Configures the required options
-3. Uploads their artwork/design when required
-4. Reviews their request
-5. Sends the request through WhatsApp
-6. The business reviews the request and confirms the quotation/order manually
+- Create, edit, and delete products and categories.
+- Manage product options and their choices.
+- Add product descriptions, features, audiences, turnaround details, and multiple images.
+- Create, edit, and delete portfolio entries in **Our Work**.
+- Upload product and portfolio images to Supabase Storage.
 
-This keeps the ordering process simple while allowing the business to handle custom pricing and requirements.
+Admin writes and image-upload link requests require a bearer token. Public catalogue and portfolio reads are available to the storefront.
 
----
+## Technology
 
-## Features
+| Area | Technology |
+| --- | --- |
+| Frontend | Next.js 16, React 19, TypeScript, Tailwind CSS |
+| API | Python 3.14+, FastAPI, Pydantic |
+| Database | PostgreSQL, SQLAlchemy, Alembic |
+| Image storage | Supabase Storage |
+| Quote handoff | WhatsApp |
 
-### Customer Features
-
-- Browse printing and branding products
-- Browse products by category
-- View detailed product information
-- Configure product-specific options
-- Select quantities and specifications
-- Select artwork files and attach them manually in WhatsApp
-- Request quotations
-- Send configured requests through WhatsApp
-- Responsive interface
-- Product-specific configuration
-
-### Admin Features
-
-The admin system is being developed to allow authorized administrators to:
-
-- Authenticate securely
-- View dashboard
-- Create products
-- Edit products
-- Delete products
-- Manage categories
-- Manage product options
-- Manage option choices
-- Upload product images
-- View customer enquiries
-- Manage customer uploaded files
-
-The current admin page is available at `/admin`. It manages products, categories, product options, and choices through the backend API.
-
----
-
-## Product Categories
-
-The platform supports different types of printing and branding services, including:
-
-- Stationery
-- Large Format
-- Apparel
-- Small Format
-- Branding
-
-Example products include:
-
-- Visiting Cards
-- Flex & Banners
-- T-Shirt Printing
-- Stickers
-- Posters
-- Brochures
-- Invitations
-- Custom Branding
-
----
-
-## Product Configuration
-
-Products can have their own configurable options.
-
-For example, a Visiting Cards product can contain:
-
-```text
-Visiting Cards
-│
-├── Paper Stock
-│   ├── Matte 350gsm
-│   ├── Soft-touch 400gsm
-│   ├── Gloss 350gsm
-│   └── Textured cotton 600gsm
-│
-├── Printing Sides
-│   ├── Single sided
-│   └── Double sided
-│
-├── Corners
-│   ├── Square
-│   └── Rounded
-│
-└── Quantity
-    ├── 100
-    ├── 250
-    ├── 500
-    └── 1000
-```
-
-The product configuration is stored in PostgreSQL rather than being hardcoded into the frontend.
-
-This allows administrators to add or modify product options without modifying frontend source code.
-
----
-
-# Architecture
-
-```text
-                         CUSTOMER
-                            │
-                            ▼
-                  ┌───────────────────┐
-                  │     Next.js       │
-                  │   React Frontend  │
-                  └─────────┬─────────┘
-                            │
-                            │ REST API
-                            ▼
-                  ┌───────────────────┐
-                  │      FastAPI      │
-                  │      Backend      │
-                  └─────────┬─────────┘
-                            │
-                ┌───────────┴───────────┐
-                │                       │
-                ▼                       ▼
-       ┌────────────────┐      ┌────────────────┐
-       │   PostgreSQL   │      │ Object Storage │
-       │    Database    │      │ Images / Files │
-       └────────────────┘      └────────────────┘
-                │
-                ▼
-       Products / Categories
-       Options / Choices
-       Enquiries / Users
-
-
-                         CUSTOMER
-                            │
-                            ▼
-                      WhatsApp
-                            │
-                            ▼
-                    Business / Admin
-```
-
----
-
-# Technology Stack
-
-## Frontend
-
-- Next.js
-- React
-- JavaScript
-- Tailwind CSS
-
-## Backend
-
-- Python
-- FastAPI
-- SQLAlchemy
-- Pydantic
-- Alembic
-
-## Database
-
-- PostgreSQL
-
-## Storage
-
-- Supabase Storage
-
-## Communication
-
-- WhatsApp
-
----
-
-# Backend Architecture
+## Repository layout
 
 ```text
 backend/
-│
-├── app/
-│   ├── models/
-│   │   ├── category.py
-│   │   ├── product.py
-│   │   ├── option.py
-│   │   └── option_choice.py
-│   │
-│   ├── schemas/
-│   │   ├── category.py
-│   │   ├── product.py
-│   │   └── option.py
-│   │
-│   ├── routers/
-│   │   ├── categories.py
-│   │   ├── products.py
-│   │   └── options.py
-│   │
-│   ├── database.py
-│   └── main.py
-│
-├── alembic/
-│   └── versions/
-│
-├── tests/
-│
-├── .env
-├── .gitignore
-├── alembic.ini
-└── pyproject.toml
+  app/                  FastAPI application, routers, models, and schemas
+  alembic/              Database migrations
+  scripts/create_admin.py
+  .env.example          Backend configuration template
+frontend/
+  app/                  Next.js pages and routes
+  components/           Storefront and admin UI
+  lib/                  API client and product content
+  .env.example          Frontend configuration template
 ```
-
----
-
-# Database Design
-
-The current database uses PostgreSQL with SQLAlchemy ORM.
-
-## Entity Relationship
-
-```text
-Category
-   │
-   │ 1:N
-   ▼
-Product
-   │
-   │ 1:N
-   ▼
-ProductOption
-   │
-   │ 1:N
-   ▼
-OptionChoice
-```
-
-## Tables
-
-### `categories`
-
-```text
-id
-name
-slug
-```
-
-### `products`
-
-```text
-id
-name
-slug
-tagline
-summary
-image_url
-image_urls (JSON array; first image is the card image)
-turnaround
-category_id
-```
-
-### `product_options`
-
-```text
-id
-name
-label
-product_id
-```
-
-### `option_choices`
-
-```text
-id
-label
-option_id
-```
-
-### `portfolio_works`
-
-```text
-id
-title
-category
-image_url
-description
-featured
-```
-
----
-
-# API
-
-The backend exposes REST APIs through FastAPI.
-
-## Products
-
-### Get all products
-
-```http
-GET /api/products/
-```
-
-Returns products together with their options and choices.
-
-## Portfolio work
-
-`GET /api/works/` returns public portfolio entries. Admins can create, update, or delete entries with `POST /api/works/`, `PATCH /api/works/{work_id}`, and `DELETE /api/works/{work_id}`. The admin dashboard's **Our Work** section manages these entries. Supply an image URL or a path under the frontend `public/` folder; file upload is not implemented.
-
-### Create a product
-
-```http
-POST /api/products/
-```
-
-Example:
-
-```json
-{
-  "name": "Visiting Cards",
-  "slug": "visiting-cards",
-  "tagline": "Make a memorable first impression.",
-  "summary": "Premium business cards for professionals and brands.",
-  "image_url": null,
-  "turnaround": "2–3 days",
-  "category_id": 1
-}
-```
-
-## Categories
-
-### Create category
-
-```http
-POST /api/categories/
-```
-
-Example:
-
-```json
-{
-  "name": "Stationery",
-  "slug": "stationery"
-}
-```
-
-## Product Options
-
-### Create product option
-
-```http
-POST /api/products/{product_id}/options
-```
-
-Example:
-
-```json
-{
-  "name": "stock",
-  "label": "Paper Stock"
-}
-```
-
-### Create option choice
-
-```http
-POST /api/products/options/{option_id}/choices
-```
-
-Example:
-
-```json
-{
-  "label": "Matte 350gsm"
-}
-```
-
----
-
-# Example API Response
-
-```json
-[
-  {
-    "id": 1,
-    "name": "Visiting Cards",
-    "slug": "visiting-cards",
-    "tagline": "Make a memorable first impression.",
-    "summary": "Premium business cards for professionals and brands.",
-    "image_url": null,
-    "turnaround": "2–3 days",
-    "category_id": 1,
-    "options": [
-      {
-        "id": 1,
-        "name": "stock",
-        "label": "Paper Stock",
-        "choices": [
-          {"id": 1, "label": "Matte 350gsm"},
-          {"id": 2, "label": "Soft-touch 400gsm"},
-          {"id": 3, "label": "Gloss 350gsm"},
-          {"id": 4, "label": "Textured cotton 600gsm"}
-        ]
-      },
-      {
-        "id": 2,
-        "name": "sides",
-        "label": "Printing Sides",
-        "choices": [
-          {"id": 5, "label": "Single sided"},
-          {"id": 6, "label": "Double sided"}
-        ]
-      },
-      {
-        "id": 3,
-        "name": "corners",
-        "label": "Corners",
-        "choices": [
-          {"id": 7, "label": "Square"},
-          {"id": 8, "label": "Rounded"}
-        ]
-      },
-      {
-        "id": 4,
-        "name": "quantity",
-        "label": "Quantity",
-        "choices": [
-          {"id": 9, "label": "100"},
-          {"id": 10, "label": "250"},
-          {"id": 11, "label": "500"},
-          {"id": 12, "label": "1000"}
-        ]
-      }
-    ]
-  }
-]
-```
-
----
-
-# Customer Flow
-
-```text
-HOME
-  ↓
-PRODUCTS
-  ↓
-PRODUCT DETAILS
-  ↓
-CONFIGURE PRODUCT
-  ↓
-UPLOAD DESIGN
-  ↓
-GET QUOTE
-  ↓
-WHATSAPP
-  ↓
-BUSINESS CONFIRMATION
-```
-
-There is no online payment flow. The business manually reviews the customer's requirements and confirms the quotation/order.
-
----
-
-# Admin Flow
-
-```text
-ADMIN LOGIN
-    ↓
-DASHBOARD
-    ↓
-Products / Categories / Enquiries
-    ↓
-Product Management
-    ├── Create
-    ├── Edit
-    └── Delete
-    ↓
-Manage Options
-    ↓
-Manage Choices
-```
-
-Admin endpoints will be protected using authentication and authorization.
-
----
-
-# Local Development
 
 ## Requirements
 
-- Python
-- uv
+- Python 3.14 or newer
+- [uv](https://docs.astral.sh/uv/)
+- Node.js and npm
 - PostgreSQL
-- Node.js
-- npm
+- A Supabase project and Storage bucket for image uploads
 
-## Backend Setup
+## Local setup
 
-### 1. Clone the repository
+Run the backend and frontend in separate terminals.
 
-```bash
-git clone https://github.com/MhdHarshil/ZestMedia.git
-cd ZestMedia
-```
-
-### 2. Enter the backend
+### 1. Configure the backend
 
 ```bash
 cd backend
-```
-
-### 3. Install dependencies
-
-```bash
 uv sync
+cp .env.example .env
 ```
 
-### 4. Configure environment variables
+Edit `backend/.env` and set at least:
 
-Copy the example and edit `backend/.env`:
+- `DATABASE_URL` — PostgreSQL connection URL using the `postgresql+psycopg://` driver.
+- `JWT_SECRET` — a long, random value. Generate one with `openssl rand -hex 32`.
+- `CORS_ORIGINS` — comma-separated frontend origins, such as `http://localhost:3000`.
 
-```env
-DATABASE_URL=postgresql+psycopg://postgres:YOUR_PASSWORD@localhost:5432/zestmedia
-JWT_SECRET=your-generated-secret
-CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
-```
+For admin image uploads, also set `SUPABASE_URL`, `SUPABASE_SECRET_KEY`, and `SUPABASE_STORAGE_BUCKET`. Keep the Supabase secret key in the backend environment only. The configured bucket must allow signed uploads and public reads for the uploaded image URLs.
 
-Generate a JWT secret with `openssl rand -hex 32`. The file `backend/.env.example` shows the required settings.
-
-Never commit `.env`.
-
----
-
-# Database Setup
-
-Create the PostgreSQL database:
-
-```sql
-CREATE DATABASE zestmedia;
-```
-
-Run migrations:
+Create the PostgreSQL database named in `DATABASE_URL` if it does not already exist, then apply migrations from the `backend/` directory:
 
 ```bash
 uv run alembic upgrade head
 ```
 
----
-
-# Run the Backend
-
-```bash
-uv run uvicorn app.main:app --reload
-```
-
-Create the first administrator in another terminal, from `backend/`:
+Create the first administrator:
 
 ```bash
 uv run python scripts/create_admin.py
 ```
 
-Then open `http://localhost:3000/admin` to sign in and manage the catalogue.
-
-Product forms accept multiple image URLs or paths such as `/images/product.jpg`. Run `uv run alembic upgrade head` after pulling schema changes to add the image list column.
-
-API:
-
-```text
-http://127.0.0.1:8000
-```
-
----
-
-# API Documentation
-
-### Swagger UI
-
-```text
-http://127.0.0.1:8000/docs
-```
-
-### ReDoc
-
-```text
-http://127.0.0.1:8000/redoc
-```
-
----
-
-# Database Migrations
-
-Create a migration:
+Start the API:
 
 ```bash
-uv run alembic revision --autogenerate -m "describe your change"
+uv run uvicorn app.main:app --reload
 ```
 
-Apply migrations:
+The API runs at `http://127.0.0.1:8000`. Interactive API documentation is at `http://127.0.0.1:8000/docs`.
+
+### 2. Configure the frontend
+
+In another terminal:
+
+```bash
+cd frontend
+npm install
+cp .env.example .env.local
+```
+
+Set `NEXT_PUBLIC_API_URL` to the backend URL. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` to the business number in international format using digits only. Optional contact and social fields can be filled in as needed. Values prefixed with `NEXT_PUBLIC_` are included in browser code; never put private keys in them.
+
+Start the development server:
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`. The admin dashboard is at `http://localhost:3000/admin`.
+
+## Configuration reference
+
+Use `backend/.env.example` and `frontend/.env.example` as the complete variable templates.
+
+| Variable | Location | Purpose |
+| --- | --- | --- |
+| `DATABASE_URL` | Backend | PostgreSQL connection string |
+| `JWT_SECRET` | Backend | Signs admin access tokens |
+| `CORS_ORIGINS` | Backend | Allowed frontend origins, comma-separated |
+| `SUPABASE_URL` | Backend | Supabase project URL for image uploads |
+| `SUPABASE_SECRET_KEY` | Backend | Private key for signing Storage upload URLs; do not expose publicly |
+| `SUPABASE_STORAGE_BUCKET` | Backend | Storage bucket name; defaults to `product-images` |
+| `NEXT_PUBLIC_API_URL` | Frontend | Base URL of the FastAPI service |
+| `NEXT_PUBLIC_WHATSAPP_NUMBER` | Frontend | Quote-request destination, digits only |
+| `NEXT_PUBLIC_CONTACT_*` | Frontend | Optional phone, email, address, and hours |
+| `NEXT_PUBLIC_INSTAGRAM_URL`, `NEXT_PUBLIC_BEHANCE_URL` | Frontend | Optional social links |
+
+Keep `.env` and `.env.local` files private. The tracked `.env.example` files contain placeholders and are safe to share. Rotate a credential immediately if it is accidentally committed or shared.
+
+## Database changes
+
+Alembic migration files are in `backend/alembic/versions/`. After pulling a change that adds a migration, run this from `backend/`:
 
 ```bash
 uv run alembic upgrade head
 ```
 
-Rollback:
-
-```bash
-uv run alembic downgrade -1
-```
-
-Check current migration:
+Useful commands:
 
 ```bash
 uv run alembic current
+uv run alembic revision --autogenerate -m "describe the change"
+uv run alembic downgrade -1
 ```
 
----
+Review autogenerated migrations before applying them, and back up production data before making schema changes.
 
-# Frontend Setup
+## API overview
 
-The frontend is built with Next.js.
+The API is served from the configured backend origin. Admin write requests use an `Authorization: Bearer <token>` header obtained from `POST /api/auth/login`.
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+| Resource | Public reads | Admin operations |
+| --- | --- | --- |
+| Products | `GET /api/products/` | `POST /api/products/`, `PATCH` and `DELETE /api/products/{product_id}` |
+| Categories | `GET /api/categories/` | `POST /api/categories/`, `PATCH` and `DELETE /api/categories/{category_id}` |
+| Product options | Included with product reads | Create, update, and delete options and choices under `/api/options/` |
+| Portfolio work | `GET /api/works/` | `POST /api/works/`, `PATCH` and `DELETE /api/works/{work_id}` |
+| Image uploads | — | `POST /api/uploads/signed-url` (admin token required) |
+| Admin authentication | — | `POST /api/auth/login` |
 
-Frontend:
+Full request and response schemas are available through Swagger UI at `/docs` while the backend is running.
 
-```text
-http://localhost:3000
-```
+## Security notes
 
-> If your frontend directory has a different name, replace `frontend` with the correct directory.
+- Keep database credentials, `JWT_SECRET`, and Supabase secret keys in backend-only environment variables.
+- Do not commit `.env`, `.env.local`, access tokens, or private keys.
+- Configure `CORS_ORIGINS` for the deployed frontend origins rather than allowing arbitrary origins.
+- Use HTTPS and secure managed database and storage settings in production.
+- Product and portfolio image uploads are issued through the authenticated backend; uploaded image URLs are stored with their catalogue records.
 
----
+## Current limitations
 
-# Environment Variables
+- Quote requests are handed off through WhatsApp; there is no online checkout or payment processing.
+- Customers attach artwork directly in WhatsApp; the site does not upload customer artwork.
+- There is no admin enquiry inbox at this time.
+- Production hosting, domain, HTTPS, backups, and monitoring must be configured for the deployment environment.
 
-## Backend
+## License
 
-```env
-DATABASE_URL=
-JWT_SECRET=
-SUPABASE_URL=
-SUPABASE_KEY=
-WHATSAPP_NUMBER=
-```
-
-## Frontend
-
-```env
-NEXT_PUBLIC_API_URL=
-NEXT_PUBLIC_WHATSAPP_NUMBER=
-NEXT_PUBLIC_CONTACT_PHONE=
-NEXT_PUBLIC_CONTACT_EMAIL=
-NEXT_PUBLIC_STUDIO_ADDRESS=
-NEXT_PUBLIC_STUDIO_HOURS=
-NEXT_PUBLIC_INSTAGRAM_URL=
-NEXT_PUBLIC_BEHANCE_URL=
-```
-
-Copy `frontend/.env.example` to `frontend/.env.local`. Set `NEXT_PUBLIC_WHATSAPP_NUMBER` to the real business number in international format using digits only. WhatsApp quote buttons stay disabled until that value is configured. Fill in the real public contact details before launch.
-
-Never commit secrets or private API keys to Git.
-
----
-
-# File Storage
-
-Product images and customer-uploaded files should not be stored directly inside PostgreSQL.
-
-The intended architecture is:
-
-```text
-Admin / Customer
-       │
-       ▼
-    FastAPI
-       │
-       ▼
-Object Storage
-       │
-       └── File URL
-              │
-              ▼
-         PostgreSQL
-```
-
-PostgreSQL stores the file URL/reference while the actual file is stored in object storage.
-
-Supabase Storage is planned for this purpose.
-
----
-
-# Security
-
-The application will use:
-
-- Environment variables for secrets
-- Password hashing
-- JWT-based authentication
-- Role-based authorization
-- Pydantic validation
-- CORS configuration
-- Secure file upload handling
-- Protected admin routes
-- Database constraints
-- Production HTTPS
-
-Sensitive files such as `.env` must never be committed.
-
-All product, category, option, and choice write endpoints require an admin JWT bearer token. Public product and category reads remain open for the storefront. Set `JWT_SECRET` before starting the backend and create the first administrator with `uv run python scripts/create_admin.py` from `backend/`.
-
-The customer quote form does not upload files. It lists selected filenames in the WhatsApp message; customers must attach the actual artwork in WhatsApp. Hosted file uploads still need a storage provider and credentials.
-
----
-
-# Testing
-
-Automated tests will be added using Python testing tools.
-
-Planned coverage:
-
-```text
-Authentication
- ├── Login
- ├── Invalid credentials
- └── Authorization
-
-Products
- ├── Create
- ├── Read
- ├── Update
- └── Delete
-
-Categories
- ├── Create
- ├── Read
- ├── Update
- └── Delete
-
-Options
- ├── Create
- └── Choices
-```
-
----
-
-# Development Roadmap
-
-## Backend
-
-- [x] PostgreSQL setup
-- [x] SQLAlchemy database connection
-- [x] SQLAlchemy models
-- [x] Alembic configuration
-- [x] Database migrations
-- [x] Category creation API
-- [x] Product creation API
-- [x] Product listing API
-- [x] Product options API
-- [x] Option choices API
-- [x] Nested product responses
-- [x] Product update API
-- [x] Product delete API
-- [x] Category CRUD
-- [x] Option update/delete
-- [x] Admin authentication
-- [x] JWT authorization for write endpoints
-- [ ] Product image upload
-- [ ] Customer file upload
-- [ ] Enquiry system
-- [ ] API tests
-- [ ] Production configuration
-
-## Frontend
-
-- [x] Initial UI
-- [x] Product pages
-- [x] Product configuration interface
-- [x] Connect storefront to FastAPI
-- [x] Replace product listing data with API data (editorial details still come from local content)
-- [x] Admin login
-- [x] Admin dashboard
-- [x] Product management UI
-- [x] Category management UI
-- [x] Option management UI
-- [x] Portfolio work management UI
-- [ ] Image upload UI
-- [ ] Enquiry management
-- [x] WhatsApp integration (configure the real business number in frontend environment variables)
-
-## Deployment
-
-- [ ] Production PostgreSQL
-- [ ] Backend deployment
-- [ ] Frontend deployment
-- [ ] Object storage configuration
-- [ ] Production environment variables
-- [ ] Domain configuration
-- [ ] HTTPS
-- [ ] Monitoring
-- [ ] Backup strategy
-
----
-
-# Project Status
-
-**Status: 🚧 Active Development**
-
-The core backend foundation is currently implemented.
-
-Current capabilities include:
-
-- PostgreSQL database
-- SQLAlchemy ORM
-- Alembic migrations
-- Categories
-- Products
-- Product options
-- Option choices
-- Nested product API responses
-- Admin login and protected product/category/option write endpoints
-- Storefront product data loaded from the API (with local fallback during setup)
-- Admin dashboard at `/admin`
-
-Remaining work includes hosted artwork uploads, production deployment, automated tests, and entering the business's real contact details and product copy.
-
----
-
-# Design Philosophy
-
-ZestMedia is intentionally designed around a simple business workflow:
-
-```text
-Discover
-   ↓
-Configure
-   ↓
-Request
-   ↓
-Communicate
-   ↓
-Confirm
-```
-
-Rather than forcing custom printing orders into a traditional e-commerce checkout, the platform focuses on product configuration and direct communication with the business.
-
----
-
-# Contributing
-
-This project is currently being developed for ZestMedia.
-
-For internal development:
-
-1. Create a feature branch.
-2. Make the required changes.
-3. Test the changes locally.
-4. Create a pull request.
-5. Review the changes before merging.
-
-Example:
-
-```bash
-git checkout -b feature/product-crud
-```
-
----
-
-# License
-
-This project is proprietary software developed for ZestMedia.
-
-All rights reserved.
-
-Unauthorized copying, distribution, modification, or commercial use is prohibited without permission from the project owner.
-
----
-
-# Author
-
-Developed for **ZestMedia**.
-
-Built with:
-
-```text
-Python
-FastAPI
-PostgreSQL
-SQLAlchemy
-Alembic
-Next.js
-React
-Tailwind CSS
-```
+Proprietary software developed for ZestMedia. All rights reserved.
