@@ -91,6 +91,57 @@
   transition: transform 650ms cubic-bezier(0.2, 0.65, 0.3, 1);
 }
 
+/* Temporary homepage motion preview. Remove these classes and keyframes to revert. */
+.motion-preview {
+  animation: motion-preview-rise 600ms cubic-bezier(0.2, 0.65, 0.3, 1) both;
+}
+
+.motion-delay-1 { animation-delay: 40ms; }
+.motion-delay-2 { animation-delay: 100ms; }
+.motion-delay-3 { animation-delay: 170ms; }
+.motion-delay-4 { animation-delay: 240ms; }
+.motion-delay-5 { animation-delay: 310ms; }
+
+.scroll-reveal-pending {
+  opacity: 0;
+  transform: translate3d(0, 20px, 0);
+}
+
+.scroll-reveal-visible {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 600ms ease-out, transform 600ms cubic-bezier(0.2, 0.65, 0.3, 1);
+}
+
+@keyframes motion-preview-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 14px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .motion-preview,
+  .motion-delay-1,
+  .motion-delay-2,
+  .motion-delay-3,
+  .motion-delay-4,
+  .motion-delay-5 {
+    animation: none;
+  }
+
+  .scroll-reveal-pending,
+  .scroll-reveal-visible {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
 @media (hover: hover) and (prefers-reduced-motion: no-preference) {
   .product-card-link:hover .product-card-image {
     transform: translate3d(0, 0, 0) scale(1.025);

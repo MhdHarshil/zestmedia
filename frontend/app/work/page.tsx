@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import Image from 'next/image'
 import { Kicker } from '@/components/section-heading'
 import { WhatsAppQuoteButton } from '@/components/cta-button'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import { getWorks } from '@/lib/api'
 
 export const metadata: Metadata = {
@@ -31,8 +32,8 @@ export default async function WorkPage() {
       <section className="mx-auto max-w-6xl px-5 py-14 md:px-8 md:py-16">
         <div className="columns-1 gap-5 sm:columns-2 lg:columns-3 [&>*]:mb-5">
           {gallery.map((item) => (
+            <ScrollReveal key={item.id} className="mb-5 break-inside-avoid">
             <figure
-              key={item.id}
               className="group relative block break-inside-avoid overflow-hidden rounded-2xl border border-border bg-muted"
             >
               <Image
@@ -50,6 +51,7 @@ export default async function WorkPage() {
                 {item.description && <span className="basis-full text-sm text-background/90">{item.description}</span>}
               </figcaption>
             </figure>
+            </ScrollReveal>
           ))}
         </div>
       </section>

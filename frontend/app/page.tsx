@@ -4,6 +4,7 @@ import { ArrowRight, PencilRuler, Printer, PackageCheck } from 'lucide-react'
 import { Hero } from '@/components/home/hero'
 import { SectionHeading } from '@/components/section-heading'
 import { ProductCard } from '@/components/product-card'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import { LinkButton } from '@/components/cta-button'
 import { getProducts } from '@/lib/api'
 
@@ -29,6 +30,7 @@ export default async function HomePage() {
       <Hero />
 
       <section className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
+        <ScrollReveal>
         <div className="flex flex-wrap items-end justify-between gap-6">
           <SectionHeading
             kicker="What we print"
@@ -41,13 +43,14 @@ export default async function HomePage() {
         </div>
         <div className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {featured.map((p, i) => (
-            <ProductCard key={p.slug} product={p} priority={i < 3} />
+            <ProductCard key={p.slug} product={p} priority={i < 3} previewDelay={i * 80} />
           ))}
         </div>
+        </ScrollReveal>
       </section>
 
       <section className="border-t border-border bg-secondary">
-        <div className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
+        <ScrollReveal className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
           <SectionHeading
             kicker="Who we work with"
             title="Made for the people who make our neighborhood."
@@ -69,10 +72,11 @@ export default async function HomePage() {
               </Link>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
 
       <section className="mx-auto max-w-6xl px-5 py-20 md:px-8 md:py-28">
+        <ScrollReveal>
         <SectionHeading kicker="How it works" title="Simple from brief to pickup." />
         <div className="mt-12 grid gap-8 md:grid-cols-3">
           {steps.map((step, i) => (
@@ -88,10 +92,11 @@ export default async function HomePage() {
             </div>
           ))}
         </div>
+        </ScrollReveal>
       </section>
 
       <section className="border-t border-border">
-        <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-20 md:grid-cols-2 md:px-8 md:py-28">
+        <ScrollReveal className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-20 md:grid-cols-2 md:px-8 md:py-28">
           <div className="relative aspect-[4/3] overflow-hidden rounded-3xl border border-border bg-muted">
             <Image
               src="/images/work-2.png"
@@ -113,7 +118,7 @@ export default async function HomePage() {
               </LinkButton>
             </div>
           </div>
-        </div>
+        </ScrollReveal>
       </section>
     </>
   )

@@ -1,13 +1,16 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { ArrowUpRight } from 'lucide-react'
+import { ScrollReveal } from '@/components/scroll-reveal'
 import type { Product } from '@/lib/products'
 
-export function ProductCard({ product, priority = false }: { product: Product; priority?: boolean }) {
+export function ProductCard({ product, priority = false, previewDelay }: { product: Product; priority?: boolean; previewDelay?: number }) {
   return (
+    <ScrollReveal className="h-full">
     <Link
       href={`/products/${product.slug}`}
-      className="product-card-link group flex flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-foreground/25"
+      className={`product-card-link ${previewDelay !== undefined ? 'motion-preview' : ''} group flex h-full flex-col overflow-hidden rounded-2xl border border-border bg-card transition-colors hover:border-foreground/25`}
+      style={previewDelay !== undefined ? { animationDelay: `${previewDelay}ms` } : undefined}
     >
       <div className="relative aspect-[4/3] overflow-hidden bg-muted">
         <Image
@@ -35,5 +38,6 @@ export function ProductCard({ product, priority = false }: { product: Product; p
         </div>
       </div>
     </Link>
+    </ScrollReveal>
   )
 }
