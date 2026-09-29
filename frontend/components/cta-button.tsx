@@ -7,8 +7,8 @@ const base =
   'inline-flex items-center justify-center gap-2 rounded-full font-medium tracking-tight transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:pointer-events-none disabled:opacity-50'
 
 const variants = {
-  brand: 'bg-brand text-brand-foreground hover:bg-brand/90',
-  ink: 'bg-primary text-primary-foreground hover:bg-primary/85',
+  brand: 'bg-brand text-brand-foreground hover:bg-brand-dark',
+  ink: 'bg-primary text-primary-foreground hover:bg-brand-dark',
   outline: 'border border-border bg-transparent text-foreground hover:bg-accent',
   ghost: 'text-foreground hover:bg-accent',
 }

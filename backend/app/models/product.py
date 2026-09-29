@@ -1,6 +1,7 @@
+from decimal import Decimal
 from typing import TYPE_CHECKING
 
-from sqlalchemy import ForeignKey, JSON, String, Text, text
+from sqlalchemy import ForeignKey, JSON, Numeric, String, Text, text
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.database import Base
@@ -25,6 +26,7 @@ class Product(Base):
     features: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     audiences: Mapped[list[str] | None] = mapped_column(JSON, nullable=True)
     turnaround: Mapped[str | None] = mapped_column(String)
+    starting_price: Mapped[Decimal | None] = mapped_column(Numeric(10, 2), nullable=True)
 
     category_id: Mapped[int] = mapped_column(
         ForeignKey("categories.id"), nullable=False

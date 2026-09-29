@@ -26,6 +26,7 @@ export function QuoteForm({ product }: { product: Product }) {
   return (
     <div className="rounded-3xl border border-border bg-card p-6 md:p-8">
       <h2 className="font-serif text-2xl font-semibold tracking-tight">Build your quote</h2>
+      {product.startingPrice != null && <p className="mt-2 text-lg font-semibold text-brand">Starting at ₹{product.startingPrice.toLocaleString('en-IN')}</p>}
       <p className="mt-1 text-sm text-muted-foreground">
         Choose your options and add any project notes. We&apos;ll confirm pricing on WhatsApp.
       </p>

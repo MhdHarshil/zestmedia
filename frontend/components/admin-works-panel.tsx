@@ -129,7 +129,7 @@ export function AdminWorksPanel({ token }: { token: string }) {
           </div>
           <label className="block text-sm">Description (optional)<textarea className={`${fieldClass} mt-1`} rows={3} value={draft.description} onChange={(e) => setDraft({ ...draft, description: e.target.value })} /></label>
           <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={draft.featured} onChange={(e) => setDraft({ ...draft, featured: e.target.checked })} /> Feature this project</label>
-          {error && <p role="alert" className="text-sm text-red-700">{error}</p>}
+          {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
           <div className="flex gap-2"><button className={buttonClass} disabled={busy || uploading}>{busy ? 'Saving…' : editingId ? 'Save changes' : 'Add work'}</button>{editingId && <button type="button" className="rounded-xl border border-border px-4 py-2.5 text-sm" onClick={() => { setEditingId(null); setDraft(blankWork) }}>Cancel</button>}</div>
         </form>
       </div>
@@ -144,7 +144,7 @@ export function AdminWorksPanel({ token }: { token: string }) {
               <div className="min-w-0 flex-1">
                 <h3 className="font-semibold">{work.title}{work.featured && <span className="ml-2 rounded-full bg-accent px-2 py-0.5 text-xs">Featured</span>}</h3>
                 <p className="text-sm text-muted-foreground">{work.category}</p>
-                <div className="mt-2 flex gap-3 text-sm"><button className="text-brand underline" onClick={() => editWork(work)}>Edit</button><button className="text-red-700 underline" onClick={() => deleteWork(work)}>Delete</button></div>
+                <div className="mt-2 flex gap-3 text-sm"><button className="text-brand underline" onClick={() => editWork(work)}>Edit</button><button className="text-destructive underline" onClick={() => deleteWork(work)}>Delete</button></div>
               </div>
             </article>
           ))}

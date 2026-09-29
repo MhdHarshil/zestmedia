@@ -1,57 +1,79 @@
 import Image from 'next/image'
-import { LinkButton, WhatsAppQuoteButton } from '@/components/cta-button'
-import { Kicker } from '@/components/section-heading'
+import Link from 'next/link'
+import { ArrowRight, MessageCircle } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { whatsappUrl } from '@/lib/whatsapp'
 
 export function Hero() {
   return (
-    <section className="relative overflow-hidden">
-      <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 pb-14 pt-14 md:grid-cols-2 md:gap-12 md:px-8 md:pb-24 md:pt-20">
-        <div className="flex flex-col items-start">
-          <Kicker className="motion-preview motion-delay-1">Print &amp; Branding Studio</Kicker>
-          <h1 className="motion-preview motion-delay-2 mt-5 font-serif text-4xl font-semibold leading-[1.03] tracking-tight text-balance sm:text-5xl md:text-6xl">
-            Print that makes people <span className="text-brand">look twice</span>.
-          </h1>
-          <p className="motion-preview motion-delay-3 mt-5 max-w-md text-lg text-muted-foreground">
-            From visiting cards to full brand identities — we design and produce tactile, high-quality print for local businesses, students, events and everyone in between.
+    <section aria-labelledby="hero-title" className="relative overflow-hidden bg-cream text-foreground">
+      <div aria-hidden="true" className="absolute inset-0">
+        <Image
+          src="/images/hero-background.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[65%_center]"
+        />
+        <div className="absolute inset-0 bg-gradient-to-r from-cream via-cream/80 to-transparent" />
+      </div>
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-40 -top-40 size-[36rem] rounded-full bg-brand-orange/10 blur-3xl"
+      />
+      <div className="relative z-10 mx-auto max-w-7xl px-4 pb-28 pt-12 md:px-6 md:pb-36 md:pt-16">
+        <div className="flex max-w-3xl flex-col gap-6">
+          <p
+            className="animate-rise inline-flex w-fit items-center gap-2 rounded-full border border-border bg-white/80 px-3 py-1 text-xs font-semibold uppercase tracking-[0.16em] text-brand-dark"
+            style={{ animationDelay: '60ms' }}
+          >
+            <span className="size-1.5 rounded-full bg-brand-orange" aria-hidden="true" />
+            Local print & branding studio
           </p>
-          <div className="motion-preview motion-delay-4 mt-8 flex flex-col gap-3 sm:flex-row">
-            <WhatsAppQuoteButton size="lg" />
-            <LinkButton href="/products" variant="outline" size="lg">
-              Explore products
-            </LinkButton>
+          <h1
+            id="hero-title"
+            className="animate-rise text-balance text-4xl font-extrabold leading-[1.05] tracking-tight sm:text-5xl lg:text-6xl"
+            style={{ animationDelay: '140ms' }}
+          >
+            Print that makes your brand <span className="text-primary">impossible to ignore.</span>
+          </h1>
+          <p
+            className="animate-rise max-w-lg text-pretty text-base leading-relaxed text-muted-foreground md:text-lg"
+            style={{ animationDelay: '240ms' }}
+          >
+            Visiting cards, packaging, brochures, banners and more — designed with you, proofed before print and
+            produced in our own studio.
+          </p>
+          <div className="animate-rise flex flex-col gap-3 sm:flex-row" style={{ animationDelay: '340ms' }}>
+            <Button
+              size="lg"
+              className="h-12 rounded-full px-6 text-base"
+              render={<Link href="/products" />}
+              nativeButton={false}
+            >
+              Browse products
+              <ArrowRight data-icon="inline-end" />
+            </Button>
+            <Button
+              size="lg"
+              variant="outline"
+              className="h-12 rounded-full border-border bg-white px-6 text-base text-foreground hover:border-primary hover:bg-white hover:text-primary"
+              render={
+                <a
+                  href={whatsappUrl("Hi Zest Media, I'd like to discuss a print project.")}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                />
+              }
+              nativeButton={false}
+            >
+              <MessageCircle data-icon="inline-start" />
+              Request a quote
+            </Button>
           </div>
-          <dl className="motion-preview motion-delay-5 mt-10 grid w-full max-w-md grid-cols-3 gap-6 border-t border-border pt-6">
-            <div>
-              <dt className="font-serif text-2xl font-semibold">10+</dt>
-              <dd className="mt-1 text-xs text-muted-foreground">Years in print</dd>
-            </div>
-            <div>
-              <dt className="font-serif text-2xl font-semibold">2k+</dt>
-              <dd className="mt-1 text-xs text-muted-foreground">Projects delivered</dd>
-            </div>
-            <div>
-              <dt className="font-serif text-2xl font-semibold">48h</dt>
-              <dd className="mt-1 text-xs text-muted-foreground">Typical turnaround</dd>
-            </div>
-          </dl>
         </div>
 
-        <div className="motion-preview motion-delay-3 relative">
-          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl border border-border bg-muted md:aspect-[4/4.4]">
-            <Image
-              src="/images/hero.png"
-              alt="A curated flat-lay of freshly printed cards, brochures, stickers and posters from the studio"
-              fill
-              priority
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-cover"
-            />
-          </div>
-          <div className="absolute -bottom-4 -left-4 hidden rounded-2xl border border-border bg-card px-5 py-4 shadow-sm sm:block">
-            <p className="font-serif text-sm font-semibold">No online payment</p>
-            <p className="text-xs text-muted-foreground">Quote &amp; approve on WhatsApp</p>
-          </div>
-        </div>
       </div>
     </section>
   )

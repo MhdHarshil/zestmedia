@@ -17,6 +17,7 @@ export type ApiProduct = {
   features: string[] | null
   audiences: string[] | null
   turnaround: string | null
+  starting_price: number | null
   category_id: number
   options: ApiOption[]
 }
@@ -120,6 +121,7 @@ export async function getProducts(): Promise<Product[]> {
         features: (record.features ?? editorial?.features) || [],
         audiences: (record.audiences ?? editorial?.audiences) || [],
         turnaround: record.turnaround || editorial?.turnaround || 'Contact us',
+        startingPrice: record.starting_price,
         options: record.options.map((option) => ({
           id: String(option.id),
           label: option.label,
@@ -147,6 +149,7 @@ export function productFromApi(record: ApiProduct, categories: ApiCategory[]): P
     features: (record.features ?? editorial?.features) || [],
     audiences: (record.audiences ?? editorial?.audiences) || [],
     turnaround: record.turnaround || editorial?.turnaround || 'Contact us',
+    startingPrice: record.starting_price,
     options: record.options.map((option) => ({ id: String(option.id), label: option.label, choices: option.choices.map((choice) => choice.label) })),
   }
 }

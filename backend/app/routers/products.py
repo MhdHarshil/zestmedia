@@ -31,6 +31,7 @@ def create_product(
         features=product_data.features,
         audiences=product_data.audiences,
         turnaround=product_data.turnaround,
+        starting_price=product_data.starting_price,
         category_id=product_data.category_id,
     )
 

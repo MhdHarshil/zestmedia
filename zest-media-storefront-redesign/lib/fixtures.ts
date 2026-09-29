@@ -1,0 +1,143 @@
+import type { Category, Product, Work } from './types'
+
+// Prototype data used only when NEXT_PUBLIC_API_URL is not configured.
+export const fixtureCategories: Category[] = [
+  { id: 1, name: 'Visiting Cards', slug: 'visiting-cards', description: 'Business cards in premium stocks and finishes', image_url: '/images/visiting-cards.png' },
+  { id: 2, name: 'Packaging', slug: 'packaging', description: 'Mailer boxes, product boxes and paper bags', image_url: '/images/packaging.png' },
+  { id: 3, name: 'Brochures & Flyers', slug: 'brochures-flyers', description: 'Folded brochures, flyers and leaflets', image_url: '/images/brochures.png' },
+  { id: 4, name: 'Banners & Signage', slug: 'banners-signage', description: 'Roll-ups, vinyl banners and display prints', image_url: '/images/banners.png' },
+  { id: 5, name: 'Stickers & Labels', slug: 'stickers-labels', description: 'Die-cut stickers, sheets and product labels', image_url: '/images/stickers.png' },
+  { id: 6, name: 'Apparel', slug: 'apparel', description: 'Printed t-shirts, totes and team wear', image_url: '/images/apparel.png' },
+  { id: 7, name: 'Stationery', slug: 'stationery', description: 'Letterheads, envelopes and notebooks', image_url: '/images/stationery.png' },
+]
+
+const opt = (id: number, name: string, labels: string[]) => ({
+  id,
+  name,
+  choices: labels.map((label, i) => ({ id: id * 100 + i, option_id: id, label })),
+})
+
+export const fixtureProducts: Product[] = [
+  {
+    id: 1,
+    name: 'Premium Visiting Cards',
+    slug: 'premium-visiting-cards',
+    description: 'Thick matte or gloss cards printed on 350–400 gsm stock with crisp colour and clean trimming.',
+    category_id: 1,
+    image_url: '/images/visiting-cards.png',
+    images: ['/images/visiting-cards.png', '/images/stationery.png'],
+    turnaround: '2–3 working days',
+    features: ['Single or double sided', 'Matte, gloss or soft-touch lamination', 'Free digital proof'],
+    options: [
+      opt(11, 'Paper stock', ['350 gsm matte', '400 gsm matte', '400 gsm gloss', 'Textured linen']),
+      opt(12, 'Finish', ['None', 'Soft-touch lamination', 'Spot UV', 'Foil stamping']),
+      opt(13, 'Quantity', ['100', '250', '500', '1000']),
+    ],
+  },
+  {
+    id: 2,
+    name: 'Custom Mailer Boxes',
+    slug: 'custom-mailer-boxes',
+    description: 'Sturdy corrugated mailer boxes printed inside and out — ideal for e-commerce and gifting.',
+    category_id: 2,
+    image_url: '/images/packaging.png',
+    images: ['/images/packaging.png', '/images/hero-print.png'],
+    turnaround: '7–10 working days',
+    features: ['Printed outside and inside', 'Custom sizes', 'Kraft or white board'],
+    options: [
+      opt(21, 'Board', ['Kraft corrugated', 'White corrugated']),
+      opt(22, 'Print sides', ['Outside only', 'Outside + inside']),
+    ],
+  },
+  {
+    id: 3,
+    name: 'Tri-fold Brochures',
+    slug: 'tri-fold-brochures',
+    description: 'A4 brochures folded into three panels, perfect for menus, services and product guides.',
+    category_id: 3,
+    image_url: '/images/brochures.png',
+    images: ['/images/brochures.png'],
+    turnaround: '3–4 working days',
+    features: ['A4 folded to DL', '130–170 gsm art paper', 'Full colour both sides'],
+    options: [
+      opt(31, 'Paper', ['130 gsm gloss', '170 gsm matte']),
+      opt(32, 'Quantity', ['100', '250', '500', '1000']),
+    ],
+  },
+  {
+    id: 4,
+    name: 'Roll-up Banner Stand',
+    slug: 'roll-up-banner-stand',
+    description: 'Portable roll-up banner with carry bag — set up in seconds for events, shops and exhibitions.',
+    category_id: 4,
+    image_url: '/images/banners.png',
+    images: ['/images/banners.png'],
+    turnaround: '2–3 working days',
+    features: ['Anti-curl print media', 'Aluminium stand with bag', 'Reusable stand'],
+    options: [opt(41, 'Size', ['2.5 × 6 ft', '3 × 6 ft', '4 × 7 ft'])],
+  },
+  {
+    id: 5,
+    name: 'Die-cut Stickers',
+    slug: 'die-cut-stickers',
+    description: 'Custom-shaped vinyl stickers for packaging, laptops and giveaways, cut precisely to your design.',
+    category_id: 5,
+    image_url: '/images/stickers.png',
+    images: ['/images/stickers.png'],
+    turnaround: '3–5 working days',
+    features: ['Waterproof vinyl', 'Any shape', 'Gloss or matte'],
+    options: [
+      opt(51, 'Material', ['Gloss vinyl', 'Matte vinyl', 'Transparent']),
+      opt(52, 'Size', ['2 in', '3 in', '4 in']),
+    ],
+  },
+  {
+    id: 6,
+    name: 'Printed T-shirts',
+    slug: 'printed-t-shirts',
+    description: 'Cotton tees printed with your logo or artwork — for teams, events and merchandise.',
+    category_id: 6,
+    image_url: '/images/apparel.png',
+    images: ['/images/apparel.png'],
+    turnaround: '5–7 working days',
+    features: ['Screen or DTF print', 'Sizes S–XXL', 'Front and back print'],
+    options: [
+      opt(61, 'Print method', ['DTF', 'Screen print']),
+      opt(62, 'Print area', ['Front', 'Front + back']),
+    ],
+  },
+  {
+    id: 7,
+    name: 'Letterhead & Envelope Set',
+    slug: 'letterhead-envelope-set',
+    description: 'Matching letterheads and envelopes that make every document look on-brand.',
+    category_id: 7,
+    image_url: '/images/stationery.png',
+    images: ['/images/stationery.png', '/images/visiting-cards.png'],
+    turnaround: '3–4 working days',
+    features: ['100 gsm bond paper', 'DL and A4 envelopes', 'Colour matched'],
+    options: [opt(71, 'Envelope size', ['DL', 'C5', 'A4'])],
+  },
+  {
+    id: 8,
+    name: 'Branded Tote Bags',
+    slug: 'branded-tote-bags',
+    description: 'Reusable cotton and canvas totes printed with your brand — great for retail and events.',
+    category_id: 6,
+    image_url: '/images/apparel.png',
+    images: ['/images/apparel.png', '/images/packaging.png'],
+    turnaround: '5–7 working days',
+    features: ['Natural or dyed fabric', 'One or two sided print', 'Long handles'],
+    options: [opt(81, 'Fabric', ['Cotton', 'Canvas'])],
+  },
+]
+
+export const fixtureWorks: Work[] = [
+  { id: 1, title: 'Café brand identity kit', category: 'Branding', client: 'Neighbourhood café', description: 'Visiting cards, menus and cup sleeves in a warm, consistent palette.', image_url: '/images/visiting-cards.png' },
+  { id: 2, title: 'Skincare mailer boxes', category: 'Packaging', client: 'D2C skincare brand', description: 'Two-colour mailers with an inside print that surprises at unboxing.', image_url: '/images/packaging.png' },
+  { id: 3, title: 'Exhibition roll-ups', category: 'Signage', client: 'Trade fair exhibitor', description: 'A set of three roll-ups designed to read clearly from across the hall.', image_url: '/images/banners.png' },
+  { id: 4, title: 'Clinic service brochure', category: 'Print', client: 'Local clinic', description: 'Tri-fold brochure explaining services with clear, friendly layouts.', image_url: '/images/brochures.png' },
+  { id: 5, title: 'Sticker drop for a zine launch', category: 'Stickers', client: 'Independent publisher', description: 'Die-cut stickers in five shapes packed as a launch-day giveaway.', image_url: '/images/stickers.png' },
+  { id: 6, title: 'Team tees & totes', category: 'Apparel', client: 'Startup offsite', description: 'Printed tees and totes for a 60-person team retreat.', image_url: '/images/apparel.png' },
+  { id: 7, title: 'Law firm stationery', category: 'Branding', client: 'Boutique law practice', description: 'Letterheads, envelopes and notebooks with a restrained, formal feel.', image_url: '/images/stationery.png' },
+]

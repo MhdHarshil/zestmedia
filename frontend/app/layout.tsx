@@ -1,8 +1,6 @@
 import { Analytics } from '@vercel/analytics/next'
 import type { Metadata, Viewport } from 'next'
-import { Fraunces, Inter } from 'next/font/google'
-import { SiteHeader } from '@/components/site-header'
-import { SiteFooter } from '@/components/site-footer'
+import { Fraunces, Inter, Plus_Jakarta_Sans } from 'next/font/google'
 import { site } from '@/lib/site'
 import './globals.css'
 
@@ -17,6 +15,12 @@ const fraunces = Fraunces({
   variable: '--font-fraunces',
   display: 'swap',
   axes: ['opsz'],
+})
+
+const jakarta = Plus_Jakarta_Sans({
+  subsets: ['latin'],
+  variable: '--font-jakarta',
+  display: 'swap',
 })
 
 export const metadata: Metadata = {
@@ -37,7 +41,7 @@ export const metadata: Metadata = {
 }
 
 export const viewport: Viewport = {
-  themeColor: '#f7f4ee',
+  themeColor: '#F7F1E7',
   colorScheme: 'light',
 }
 
@@ -47,11 +51,9 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${fraunces.variable}`} suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${fraunces.variable} ${jakarta.variable}`} suppressHydrationWarning>
       <body className="min-h-dvh antialiased font-sans">
-        <SiteHeader />
-        <main>{children}</main>
-        <SiteFooter />
+        {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

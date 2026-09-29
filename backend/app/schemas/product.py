@@ -1,3 +1,4 @@
+from decimal import Decimal
 from pydantic import BaseModel, ConfigDict, Field
 
 class OptionChoiceResponse(BaseModel):
@@ -26,6 +27,7 @@ class ProductResponse(BaseModel):
     features: list[str] | None = None
     audiences: list[str] | None = None
     turnaround: str | None 
+    starting_price: Decimal | None = None
     category_id: int
     options: list[ProductOptionResponse]
     
@@ -42,6 +44,7 @@ class ProductCreate(BaseModel):
     features: list[str] | None = None
     audiences: list[str] | None = None
     turnaround: str | None = None
+    starting_price: Decimal | None = Field(default=None, ge=0)
     category_id: int
     
 class ProductUpdate(BaseModel):
@@ -56,3 +59,4 @@ class ProductUpdate(BaseModel):
     audiences: list[str] | None = None
     turnaround: str | None = None
     category_id: int | None = None
+    starting_price: Decimal | None = Field(default=None, ge=0)

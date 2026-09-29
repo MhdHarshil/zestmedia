@@ -16,6 +16,7 @@ export type Product = {
   features: string[]
   audiences: string[]
   turnaround: string
+  startingPrice?: number | null
   options: ProductOption[]
 }
 
